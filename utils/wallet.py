@@ -84,5 +84,7 @@ class Wallet:
 
     def transferETHMax(self, toAddress):
         valueWei = self.ethAmountWei() - 21000 * self.gasPrice()
+        if valueWei < 0:
+            return None, '地址余额不足'
         return self.__transferETH(toAddress, valueWei, self.nonce())
     

@@ -21,7 +21,7 @@ btc = '0xb02A8fd86fF3A2EAF85904a844dF995677f13509'
 
 erc20_usdt = erc20.ERC20(w3, usdt)
 
-file_path = './files/wallets_1699867201.csv'
+file_path = './files/wallets_1699964700.csv'
 
 
 first_row = True
