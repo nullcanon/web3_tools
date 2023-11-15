@@ -1,2 +1,1 @@
-config.json
-*.csv
+__pycache__
