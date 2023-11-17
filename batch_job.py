@@ -36,7 +36,7 @@ def recive_eth_batch(w3, file_path, recive_address):
 
 
 
-def send_erc20_batch(file_path, erc20_token, from_wallet):
+def send_erc20_batch(file_path, erc20_token, from_wallet, amount):
     first_row = True
     nonce = from_wallet.nonce()
     with open(file_path) as f:
@@ -46,7 +46,7 @@ def send_erc20_batch(file_path, erc20_token, from_wallet):
                 first_row = False
                 continue
 
-            message = erc20_token.transfer(row[0], 20 * (10 ** erc20_token.decimals), from_wallet, nonce)
+            message = erc20_token.transfer(row[0], amount, from_wallet, nonce)
             nonce = nonce + 1
             print(message)
 
@@ -60,7 +60,7 @@ def recive_erc20_batch(w3, file_path, erc20_token, recive_address):
                 first_row = False
                 continue
             from_wallet = wallet.Wallet(w3, row[0], row[1])
-            message = erc20_token.transfer(recive_address, 1 * (10 ** erc20_token.decimals), from_wallet, from_wallet.nonce())
+            message = erc20_token.transfer(recive_address, erc20_token.balanceOf(from_wallet.address()), from_wallet, from_wallet.nonce())
             print(message)
 
 
@@ -80,3 +80,17 @@ def generate_wallets_batch(numbers):
             writer.writerow(newrow)
 
     return file_name, mnemonic, wallets
+
+
+def erc20_approve_batch(w3, file_path, erc20_token, spender, amount):
+    first_row = True
+    with open(file_path) as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if first_row:
+                first_row = False
+                continue
+            from_wallet = wallet.Wallet(w3, row[0], row[1])
+            nonce = from_wallet.nonce()
+            approve_message_usdt = erc20_token.approve(spender, amount, from_wallet, nonce)
+            print(approve_message_usdt)

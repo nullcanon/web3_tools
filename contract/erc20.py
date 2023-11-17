@@ -21,7 +21,7 @@ class ERC20:
 
             if Decimal(self.balanceOf(sender)) < Decimal(amount):
                     return None, 'Platform USDT token is insufficient, please try again later'
-            estimate_gas = self.erc20_contract.functions.transferFrom(sender, recipient, amount).estimateGas({'from':sender})
+            estimate_gas = self.erc20_contract.functions.transferFrom(sender, recipient, amount).estimateGas({'from':wallet.address()})
             approve_txn = self.erc20_contract.functions.transferFrom(sender, recipient, amount).buildTransaction(
                 wallet.buildTx(estimate_gas, nonce)
             )
@@ -52,7 +52,7 @@ class ERC20:
         try:
             spender = Web3.toChecksumAddress(spender)
             userAddress = wallet.address()
-            estimate_gas = self.erc20_contract.functions.approve(spender, amount).estimateGas({'from':spender})
+            estimate_gas = self.erc20_contract.functions.approve(spender, amount).estimateGas({'from':wallet.address()})
             approve_txn = self.erc20_contract.functions.approve(spender, amount).buildTransaction( wallet.buildTx(estimate_gas, nonce))
             tx_hash = wallet.signedAndSendTransaction(approve_txn)
             return tx_hash, 'success'
